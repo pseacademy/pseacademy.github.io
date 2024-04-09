@@ -1,50 +1,83 @@
-// 토픽과 질문 데이터
-const topicsWithQuestions = {
-    "Technology": ["What are the latest technological advancements?", "How does artificial intelligence impact our daily lives?", "What are the potential benefits and risks of blockchain technology?"],
-    "Travel": ["What are some must-visit travel destinations?", "How has travel changed over the years?", "What are some tips for traveling on a budget?"],
-    "Food": ["What are some popular dishes from around the world?", "How does food culture vary between different regions?", "What are some cooking techniques everyone should know?"],
-    "History": ["What are some key events in world history?", "How has history shaped the present?", "What are some lesser-known historical facts?"],
-    "Movies": ["What are some must-watch movies of all time?", "How has the film industry evolved over the years?", "What are some common themes in movies?"],
-    "Books": ["What are some classic novels everyone should read?", "How does reading impact personal growth?", "What are some benefits of audiobooks over traditional books?"]
+// 데이터: 각 날짜의 Casual Conversation과 Following Questions
+const data = {
+    "Day1": {
+        "topic": "What is your favorite hobby?",
+        "questions": ["What do you enjoy most about it?", "How did you get into it?", "Do you have any tips for beginners?"]
+    },
+    "Day2": {
+        "topic": "What's the last movie you watched?",
+        "questions": ["What did you think about it?", "Would you recommend it?", "Who would you recommend it to?"]
+    },
+    "Day3": {
+        "topic": "If you could travel anywhere, where would you go?",
+        "questions": ["Why would you choose that destination?", "What would you like to do there?", "Who would you bring with you?"]
+    },
+    // Day4부터 Day20까지의 데이터도 동일하게 작성
+    "Day4": {
+        "topic": "What's your favorite type of cuisine?",
+        "questions": ["What dish would you recommend?", "Have you ever tried cooking it yourself?", "Where did you first try it?"]
+    },
+    // 나머지 Day들의 데이터도 동일하게 작성
+    "Day20": {
+        "topic": "What's your favorite book?",
+        "questions": ["What did you like most about it?", "Did it leave an impact on you?", "Would you recommend it to others?"]
+    }
 };
 
-// 버튼 요소 가져오기
-const generateBtn = document.getElementById("generate-btn");
+// 휴일 배열 설정 (월과 일을 모두 고려하여 설정)
+const holidays = [
+    "2024-04-05", // 휴일 1
+    "2024-04-15"  // 휴일 2
+    // 필요한 만큼 휴일을 추가하세요
+];
 
-// 토픽 표시 요소 가져오기
-const topicDisplay = document.getElementById("topic-display");
+let questionsVisible = false; // 질문이 현재 보이는지 여부를 추적하는 변수
 
-// 질문 표시 요소 가져오기
-const questionsDisplay = document.getElementById("questions");
+// 버튼 클릭 시 Following Questions 표시 또는 숨기기
+document.getElementById('showQuestionsBtn').addEventListener('click', function() {
+    // 사용자가 설정한 개강일과 종강일
+    const startDate = new Date("2024-04-01"); // 개강일
+    const endDate = new Date("2024-04-26");   // 종강일
 
-// 랜덤 토픽과 질문 생성 함수
-function generateRandomTopic() {
-    // 토픽 랜덤 선택
-    const topics = Object.keys(topicsWithQuestions);
-    const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-    
-    // 질문 랜덤 선택
-    const questions = topicsWithQuestions[randomTopic];
-    const randomQuestions = questions.slice(0, 3); // 처음 3개의 질문 선택
-    
-    return { topic: randomTopic, questions: randomQuestions };
-}
+    // 오늘의 날짜
+    const today = new Date();
+    let currentDay = 0; // 오늘의 Day
 
-// 버튼 클릭 이벤트 리스너 추가
-generateBtn.addEventListener("click", function() {
-    // 랜덤 토픽과 질문 생성
-    const { topic, questions } = generateRandomTopic();
-    
-    // 화면에 토픽 표시
-    topicDisplay.textContent = "Random Topic: " + topic;
-    
-    // 질문들을 리스트로 표시
-    questionsDisplay.innerHTML = "";
-    const questionsList = document.createElement("ul");
-    questions.forEach(question => {
-        const questionItem = document.createElement("li");
-        questionItem.textContent = question;
-        questionsList.appendChild(questionItem);
-    });
-    questionsDisplay.appendChild(questionsList);
+    // 오늘의 날짜가 개강일 이전인 경우
+    if (today < startDate) {
+        alert("개강일 이전입니다.");
+        return;
+    }
+
+    // 오늘의 날짜가 종강일 이후인 경우
+    if (today > endDate) {
+        alert("종강일 이후입니다.");
+        return;
+    }
+
+    // 오늘의 Day 계산 (휴일은 제외)
+    for (let i = startDate; i <= endDate; i.setDate(i.getDate() + 1)) {
+        if (i.getDay() !== 0 && i.getDay() !== 6) { // 휴일이 아닌 경우에만 Day 증가
+            currentDay++;
+        }
+        if (i.toDateString() === today.toDateString()) {
+            break; // 오늘의 날짜와 일치하는 경우 종료
+        }
+    }
+
+    // 현재 Day에 해당하는 데이터를 가져와서 표시
+    const currentData = data[`Day${currentDay}`];
+    if (currentData) {
+        const questionsContainer = document.getElementById('questionsContainer');
+        questionsContainer.innerHTML = ''; // 이전에 표시된 질문들을 초기화
+        currentData.questions.forEach(question => {
+            const questionElement = document.createElement('p');
+            questionElement.textContent = question;
+            questionsContainer.appendChild(questionElement);
+        });
+        this.textContent = 'Hide Questions';
+        questionsVisible = true;
+    } else {
+        alert('There are no questions for today.');
+    }
 });

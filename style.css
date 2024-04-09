@@ -1,43 +1,39 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
 }
 
 .container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
     text-align: center;
 }
 
 h1 {
-    color: #333;
+    font-size: 2em;
+}
+
+.topic {
+    font-size: 1.2em;
+    margin-bottom: 20px;
 }
 
 button {
     padding: 10px 20px;
-    font-size: 16px;
+    font-size: 1em;
     background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-bottom: 20px;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-#topic-display {
-    font-size: 24px;
+#questionsContainer {
     margin-top: 20px;
-}
-
-.questions-container {
-    margin-top: 20px;
-    text-align: left;
 }
