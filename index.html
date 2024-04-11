@@ -1,14 +1,15 @@
+<!-- index.html -->
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>수강신청 안내문자 생성기</title>
+    <title>수강 신청 안내 문자 생성기</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>수강신청 안내문자 생성기</h1>
         <div class="input-section">
             <label for="start-date">개강일:</label>
             <input type="date" id="start-date" name="start-date">
@@ -25,15 +26,27 @@
         </div>
         <div class="input-section">
             <label for="class">반:</label>
-            <select id="class" name="class">
-                <!-- 반 선택 옵션은 JavaScript로 동적으로 추가될 예정입니다 -->
-            </select>
+            <select id="class" name="class"></select>
+        </div>
+        <div class="input-section">
+            <label for="custom-message">사용자 정의 메시지:</label>
+            <textarea id="custom-message" name="custom-message" rows="4"></textarea>
         </div>
         <button id="generate-btn">문자 생성</button>
-        <div id="message-output">
-            <!-- 생성된 문자 내용이 여기에 출력될 예정입니다 -->
+        <button id="settings-btn">기본문자 변경</button>
+    </div>
+
+    <!-- 설정 팝업 창 -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>기본 문자 변경</h2>
+            <textarea id="default-message" rows="10"></textarea>
+            <button id="save-default-message-btn">저장</button>
         </div>
     </div>
+
+    <div id="message-output"></div>
 
     <script src="script.js"></script>
 </body>
