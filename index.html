@@ -1,21 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Topic Generator</title>
-    <link rel="stylesheet" href="style.css">
+    <title>수강신청 안내문자 생성기</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
     <div class="container">
-        <h1>Topic Generator</h1>
-        <button id="generate-btn">Generate Random Topic</button>
-        <div id="topic-display"></div>
-        <div id="questions"></div>
+        <h1>수강신청 안내문자 생성기</h1>
+        <div class="input-section">
+            <label for="start-date">개강일:</label>
+            <input type="date" id="start-date" name="start-date">
+        </div>
+        <div class="input-section">
+            <label for="course">과정:</label>
+            <select id="course" name="course">
+                <option value="regular">정규/고급과정</option>
+                <option value="short">단과과정</option>
+                <option value="lite">LITE과정</option>
+                <option value="saturday">영어로운토요일</option>
+                <option value="pronunciation">발음클리닉</option>
+            </select>
+        </div>
+        <div class="input-section">
+            <label for="class">반:</label>
+            <select id="class" name="class">
+                <!-- 반 선택 옵션은 JavaScript로 동적으로 추가될 예정입니다 -->
+            </select>
+        </div>
+        <button id="generate-btn">문자 생성</button>
+        <div id="message-output">
+            <!-- 생성된 문자 내용이 여기에 출력될 예정입니다 -->
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
-
 </html>

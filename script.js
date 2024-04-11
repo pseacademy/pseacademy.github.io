@@ -1,50 +1,69 @@
-// 토픽과 질문 데이터
-const topicsWithQuestions = {
-    "Technology": ["What are the latest technological advancements?", "How does artificial intelligence impact our daily lives?", "What are the potential benefits and risks of blockchain technology?"],
-    "Travel": ["What are some must-visit travel destinations?", "How has travel changed over the years?", "What are some tips for traveling on a budget?"],
-    "Food": ["What are some popular dishes from around the world?", "How does food culture vary between different regions?", "What are some cooking techniques everyone should know?"],
-    "History": ["What are some key events in world history?", "How has history shaped the present?", "What are some lesser-known historical facts?"],
-    "Movies": ["What are some must-watch movies of all time?", "How has the film industry evolved over the years?", "What are some common themes in movies?"],
-    "Books": ["What are some classic novels everyone should read?", "How does reading impact personal growth?", "What are some benefits of audiobooks over traditional books?"]
+// script.js
+
+// 과정에 따른 반 옵션 설정
+const classOptions = {
+    regular: ["Alpha", "Beta", "Gamma", "Delta"],
+    short: ["A", "B", "C"],
+    lite: ["Lite 1", "Lite 2"],
+    saturday: ["Saturday"],
+    pronunciation: ["Pronunciation"]
 };
 
-// 버튼 요소 가져오기
+// HTML 요소 가져오기
+const startDateInput = document.getElementById("start-date");
+const courseSelect = document.getElementById("course");
+const classSelect = document.getElementById("class");
 const generateBtn = document.getElementById("generate-btn");
+const messageOutput = document.getElementById("message-output");
 
-// 토픽 표시 요소 가져오기
-const topicDisplay = document.getElementById("topic-display");
+// 과정 선택 변경 시, 해당하는 반 옵션 설정
+courseSelect.addEventListener("change", () => {
+    const selectedCourse = courseSelect.value;
+    const classes = classOptions[selectedCourse];
+    updateClassOptions(classes);
+});
 
-// 질문 표시 요소 가져오기
-const questionsDisplay = document.getElementById("questions");
+// 반 옵션 업데이트 함수
+function updateClassOptions(classes) {
+    classSelect.innerHTML = ""; // 기존 옵션 초기화
 
-// 랜덤 토픽과 질문 생성 함수
-function generateRandomTopic() {
-    // 토픽 랜덤 선택
-    const topics = Object.keys(topicsWithQuestions);
-    const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-    
-    // 질문 랜덤 선택
-    const questions = topicsWithQuestions[randomTopic];
-    const randomQuestions = questions.slice(0, 3); // 처음 3개의 질문 선택
-    
-    return { topic: randomTopic, questions: randomQuestions };
+    classes.forEach(className => {
+        const option = document.createElement("option");
+        option.textContent = className;
+        option.value = className;
+        classSelect.appendChild(option);
+    });
 }
 
-// 버튼 클릭 이벤트 리스너 추가
-generateBtn.addEventListener("click", function() {
-    // 랜덤 토픽과 질문 생성
-    const { topic, questions } = generateRandomTopic();
-    
-    // 화면에 토픽 표시
-    topicDisplay.textContent = "Random Topic: " + topic;
-    
-    // 질문들을 리스트로 표시
-    questionsDisplay.innerHTML = "";
-    const questionsList = document.createElement("ul");
-    questions.forEach(question => {
-        const questionItem = document.createElement("li");
-        questionItem.textContent = question;
-        questionsList.appendChild(questionItem);
-    });
-    questionsDisplay.appendChild(questionsList);
+// 문자 생성 버튼 클릭 시, 해당하는 문자 내용 출력
+generateBtn.addEventListener("click", () => {
+    const startDate = startDateInput.value;
+    const course = courseSelect.options[courseSelect.selectedIndex].text;
+    const className = classSelect.options[classSelect.selectedIndex].text;
+
+    const message = generateMessage(startDate, course, className);
+    messageOutput.textContent = message;
 });
+
+// 문자 내용 생성 함수
+function generateMessage(startDate, course, className) {
+    let message = `프린서플 수강 신청 확인 안내\n\n`;
+    message += `★ 개강은 ${startDate} 입니다.\n`;
+    message += `★ 스터디는 개강일 다음 영업일부터 시작됩니다.\n`;
+
+    if (course === "정규/고급과정") {
+        message += "\n**교재안내\n- " + className + " 수업교재(개강 후 e-book 배부), Oxford Picture Dictionary - 3rd Edition, English(학원 또는 시중 구매)\n";
+        message += "\n**교재 구매 링크(택배) : https://forms.gle/ao8x4dQvjw8dEx9v5\n";
+        message += "3층 안내데스크로 방문하거나 택배로 교재를 구매하실 수 있습니다.\n";
+        message += "개강일에는 등록 및 상담 등의 업무로 안내데스크가 상당히 혼잡할 수 있으니 여유있게 방문해 주시기 바랍니다.\n";
+        message += "개강 후 학원 생활 안내 오리엔테이션이 진행됩니다.\n";
+        message += "혹시 오리엔테이션에 불참하신 경우에는 3층 안내데스크로 문의해 주시기 바랍니다.\n";
+        message += "※ 온라인 수강생은 개강일 오전 8시 온라인 수강 방법 안내 문자가 전송될 예정입니다.\n";
+        message += "※ 결제가 완료되기 전 까지는 가등록 상태이며, 수강료 납부가 확인 되어야 최종 수강 등록이 완료됩니다.\n";
+    } else {
+        message += `※ 온라인 수강생은 개강일 오전 8시 온라인 수강 방법 안내 문자가 전송될 예정입니다.\n`;
+        message += `※ 결제가 완료되기 전 까지는 가등록 상태이며, 수강료 납부가 확인 되어야 최종 수강 등록이 완료됩니다.\n`;
+    }
+
+    return message;
+}
