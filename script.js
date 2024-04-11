@@ -38,8 +38,8 @@ function updateClassOptions(classes) {
 // 문자 생성 버튼 클릭 시, 해당하는 문자 내용 출력
 generateBtn.addEventListener("click", () => {
     const startDate = startDateInput.value;
-    const course = courseSelect.options[courseSelect.selectedIndex].text;
-    const className = classSelect.options[classSelect.selectedIndex].text;
+    const course = courseSelect.value;
+    const className = classSelect.value;
 
     const message = generateMessage(startDate, course, className);
     messageOutput.textContent = message;
@@ -49,9 +49,17 @@ generateBtn.addEventListener("click", () => {
 function generateMessage(startDate, course, className) {
     let message = `프린서플 수강 신청 확인 안내\n\n`;
     message += `★ 개강은 ${startDate} 입니다.\n`;
-    message += `★ 스터디는 개강일 다음 영업일부터 시작됩니다.\n`;
 
-    if (course === "정규/고급과정") {
+    const studyStartDates = {
+        Alpha: getStudyStartDate(startDate, 1),
+        Beta: getStudyStartDate(startDate, 2),
+        Gamma: getStudyStartDate(startDate, 3),
+        Delta: getStudyStartDate(startDate, 4)
+    };
+
+    message += `★ 스터디는 개강일 ${studyStartDates[className]}부터 시작됩니다.\n`;
+
+    if (course === "regular") {
         message += "\n**교재안내\n- " + className + " 수업교재(개강 후 e-book 배부), Oxford Picture Dictionary - 3rd Edition, English(학원 또는 시중 구매)\n";
         message += "\n**교재 구매 링크(택배) : https://forms.gle/ao8x4dQvjw8dEx9v5\n";
         message += "3층 안내데스크로 방문하거나 택배로 교재를 구매하실 수 있습니다.\n";
@@ -66,4 +74,16 @@ function generateMessage(startDate, course, className) {
     }
 
     return message;
+}
+
+// 스터디 시작일 계산 함수
+function getStudyStartDate(startDate, daysToAdd) {
+    const start = new Date(startDate);
+    start.setDate(start.getDate() + daysToAdd);
+    const studyStartDate = start.toLocaleDateString("ko-KR", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    });
+    return studyStartDate;
 }
